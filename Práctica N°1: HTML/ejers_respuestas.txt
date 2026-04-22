@@ -1,0 +1,25 @@
+Ejercitación 1 - Responder el siguiente cuestionario
+
+1. ¿Ventajas de HTML5?
+HTML5 ofrece una estructura más semántica del contenido, soporte nativo para audio y video, mejor compatibilidad con dispositivos móviles, formularios con validación integrada y una base moderna para desarrollar sitios web más accesibles y mantenibles.
+
+2. ¿Por qué utilizarlo?
+Se utiliza porque simplifica el desarrollo web, evita depender de plugins externos para multimedia, mejora la experiencia del usuario y está ampliamente soportado por los navegadores actuales.
+
+3. Nombre ventajas
+- Etiquetas semánticas (header, nav, section, article, footer).
+- Multimedia nativa (audio y video).
+- Nuevos tipos de campos y validaciones en formularios.
+- Mejor accesibilidad y SEO.
+- Compatibilidad con diseño responsive en distintos dispositivos.
+
+Ejercitación 2
+
+2.A) ¿Qué formatos soporta?
+Los formatos de audio más soportados en HTML5 son: MP3, OGG y WAV.
+
+Ejercitación 3
+3.A) ¿Qué formatos soporta ?
+Los formatos de video más soportados en HTML5 son: MP4, WebM y OGG.
+
+

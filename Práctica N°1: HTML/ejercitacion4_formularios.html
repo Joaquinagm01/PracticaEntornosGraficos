@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --line: #d8e1ea;
+      --text: #1f2933;
+      --accent: #1f7a8c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(860px, 92vw);
+      margin: 28px auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+    }
+
+    p {
+      margin: 0;
+      color: #4b5a67;
+    }
+
+    form {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    label {
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      max-width: 360px;
+      border: 1px solid #a8b8c6;
+      border-radius: 8px;
+      padding: 9px 10px;
+      font: inherit;
+    }
+
+    button {
+      width: fit-content;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <form>
+        <input id="campo-requerido" name="campo-requerido" type="text" required placeholder="Escribí algo" aria-label="Campo requerido" />
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <form>
+        <input id="campo-email" name="campo-email" type="email" required placeholder="nombre@dominio.com" aria-label="Campo email" />
+        <button type="submit">Validar email</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <form>
+        <input id="campo-fecha" name="campo-fecha" type="date" required aria-label="Campo fecha" />
+        <button type="submit">Validar fecha</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <form>
+        <input id="campo-color" name="campo-color" type="color" value="#1f7a8c" aria-label="Campo color" />
+        <button type="submit">Enviar color</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <form>
+        <input id="campo-number" name="campo-number" type="number" min="1" max="10" required placeholder="Ingresá un número entre 1 y 10" aria-label="Campo número" />
+        <button type="submit">Validar número</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
