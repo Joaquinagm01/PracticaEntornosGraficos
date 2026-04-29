@@ -9,6 +9,7 @@ Guardar, organizar y versionar los trabajos prácticos desarrollados durante la 
 ## Estructura actual
 
 - Práctica N°1: HTML
+- Práctica N°2: Bootstrap
 
 ## Contenido de la Práctica N°1
 
@@ -21,6 +22,12 @@ Guardar, organizar y versionar los trabajos prácticos desarrollados durante la 
 
 - HTML5
 - CSS3
+- Bootstrap 5
+
+## Contenido de la Práctica N°2
+
+- `index.html`: resolución de práctica 1 (instalación e introducción) y práctica 2 (grilla responsive).
+- `estilo.css`: estilos propios, incluyendo la clase `contenedor`.
 
 ## Estado
 
