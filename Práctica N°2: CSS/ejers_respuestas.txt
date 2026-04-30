@@ -1,0 +1,252 @@
+Ejercicio 1: Responder
+
+1. ¿Qué es CSS y para qué se usa?
+CSS (Cascading Style Sheets - Hojas de Estilo en Cascada) es un lenguaje de标记语言 utilizado para describir la presentación visual de un documento HTML. Se usa para controlar el formato, diseño, colores, fuentes, spacing, y otros aspectos visuales de los elementos en una página web, permitiendo分离 contenido (HTML) de presentación.
+
+2. CSS utiliza reglas para las declaraciones de estilo, ¿cómo funcionan?
+Las reglas CSS terdiri de dos partes:
+- Selector: identifica qué elementos HTML serán afectados
+- Declaración: define las propiedades de estilo a aplicar
+Ejemplo: p { color: blue; }
+donde "p" es el selector y "color: blue;" es la declaración.
+
+3. ¿Cuáles son las tres formas de dar estilo a un documento?
+   a) Estilo en línea (inline): usando el atributo "style" directamente en las标签 HTML
+   b) Estilo interno (internal): usando la etiqueta <style> en el <head> del documento
+   c) Hoja de estilo externa (external): usando un archivo .css separado vinculado através de <link>
+
+4. ¿Cuáles son los distintos tipos de selectores más utilizados? Ejemplifique cada uno.
+   a) Selector de elemento: selecciona por标签 HTML
+      p { color: blue; }
+   
+   b) Selector de clase: selecciona elementos con una clase específica
+      .destacado { font-weight: bold; }
+   
+   c) Selector de ID: selecciona un elemento con un ID único
+      #encabezado { font-size: 24px; }
+   
+   d) Selector universal: selecciona todos los elementos
+      * { margin: 0; }
+   
+   e) Selector descendente: selecciona elementos dentro de otros
+      div p { color: red; }
+   
+   f) Selector de atributo: selecciona elementos con un atributo específico
+      [href] { color: green; }
+
+5. ¿Qué es una pseudo-clase? Cuáles son las más utilizadas aplicadas a vínculos?
+Una pseudo-clase es una palabra clave que se añade a los selectores para especificar un estado especial del elemento. Las más utilizadas para enlaces son:
+   :link - enlace no visitado
+   :visited - enlace ya visitado
+   :hover - cuando el mouse está sobre el enlace
+   :active - cuando el enlace está siendo hecho clic
+
+6. ¿Qué es la herencia?
+La herencia es el mecanismo por el cual algunas propiedades CSS se transmiten automáticamente desde los elementos padres (contenedores) a los elementos hijos (contenidos). Por ejemplo, si un <div> tiene color: blue, todos los elementos dentro de él heredarán ese color a menos que se especifique lo contrario.
+
+7. ¿En qué consiste el proceso denominado cascada?
+La cascada es el proceso por el cual el navegador determina qué estilos aplicar cuando múltiples reglas afectan al mismo elemento. El orden de prioridad es:
+   a) Declaraciones con !important (mayor prioridad)
+   b) Estilos en línea (inline)
+   c) Estilos interna y externamente (por orden de aparición, la última tiene prioridad)
+   d) Selectores más específicos sobrescriben a los más generales
+   e) Herencia (menor prioridad)
+
+Ejercicio 2: Analizar el siguiente código señalando declaraciones y aplicaciones de reglas, y su efecto.
+
+Código CSS:
+p#normal { 
+    font-family: arial,helvetica; 
+    font-size: 11px; 
+    font-weight: bold; 
+} 
+*#destacado { 
+    border-style: solid; 
+    border-color: blue; 
+    border-width: 2px; 
+} 
+#distinto { 
+    background-color: #9EC7EB; 
+    color: red; 
+} 
+
+HTML:
+<p id="normal">Este es un párrafo</p>          <- Se aplica fuente Arial, 11px, bold
+<p id="destacado">Este es otro párrafo</p>       <- Borde sólido azul de 2px
+<table id="destacado"><tr><td>Esta es una tabla</td></tr></table>  <- Borde sólido azul de 2px
+<p id="distinto">Este es el último párrafo</p>  <- Fondo azul claro y texto rojo
+
+Efecto:
+- El primer párrafo tiene fonte Arial, tamaño 11px y está en negrita
+- El segundo párrafo y la tabla tienen un borde sólido azul de 2px
+- El último párrafo tiene fondo azul claro (#9EC7EB) y texto de color rojo
+
+Ejercicio 3: Analizar el siguiente código señalando declaraciones y aplicaciones de reglas, y su efecto.
+
+Código CSS:
+p.quitar { 
+    color: red; 
+} 
+*.desarrollo { 
+    font-size: 8px; 
+} 
+.importante { 
+    font-size: 20px; 
+} 
+
+HTML:
+<p class="desarrollo">  
+En este primer párrafo trataremos lo siguiente: 
+<br />xxxxxxxxxxxxxxxxxxxxxxxxx 
+</p> 
+<- Aplica clase .desarrollo: tamaño de fuente 8px
+
+<p class="quitar"> 
+Este párrafo debe ser quitado de la obra... 
+<br />xxxxxxxxxxxxxxxxxxxxxxxxx 
+</p> 
+<- Aplica clase .quitar: color rojo
+
+<p > 
+En este otro párrafo trataremos otro tema:<br /> 
+xxxxxxxxxxxxxxxxxxxxxxxxx 
+</p> 
+<- Sin clase: estilos por defecto del navegador
+
+<p class="importante"> 
+Y este es el párrafo más importante de la obra... 
+<br />xxxxxxxxxxxxxxxxxxxxxxxxx 
+</p> 
+<- Aplica clase .importante: tamaño de fuente 20px
+
+<h1 class="quitar">Este encabezado también debe ser quitado de la obra</h1> 
+<- Aplica clase .quitar al h1: color rojo (hereda el color a menos que se sobrescriba)
+
+<p class="quitar importante">Se pueden aplicar varias clases a la vez</p> 
+<- Aplica ambas clases: .quitar y .importante
+   Cuando hay conflictos, prevalece la última declaration en orden de apariencia
+   En este caso, font-size: 20px de .importante prevalece sobre font-size: 8px de .desarrollo
+   Y el color: red de .quitar también aplica
+
+Ejercicio 4: Analizar los siguientes códigos y comparar sus efectos.
+
+Declaraciones CSS comunes:
+* {color: green; }
+a:link {color: gray; }
+a:visited {color: blue; }
+a:hover {color: fuchsia; }
+a:active {color: red; }
+p {font-family: arial,helvetica; font-size: 10px; color: black; } 
+.contenido {font-size: 14px; font-weight: bold; }
+
+Código 1:
+<body> 
+<p class="contenido" style="font-weight: normal;"> 
+Este es un texto ...............</p> 
+<table> 
+<tr> 
+<td>Y esta es una tabla.......</td> 
+</tr> 
+<tr> 
+<td><a href="http://www.google.com.ar">con un enlace</a></td> 
+</tr> 
+</table> 
+</body> 
+
+Efectos:
+- El párrafo tiene clase "contenido" -> font-size: 14px, font-weight: bold
+- Además tiene style inline "font-weight: normal" -> sobrescribe el bold a normal
+- Color del párrafo: black (declaración de p sobrescribe el * {color: green})
+- La tabla no tiene clase, usa estilos por defecto
+- El enlace: color gray (a:link) porque no está visitado ni hover
+
+Código 2:
+<body class="contenido"> 
+<p>Este es un texto................</p> 
+<table> 
+<tr> 
+<td>Y esta es una tabla.......</td> 
+</tr> 
+<tr> 
+<td><a href="http://www.google.com.ar">con un enlace</a></td> 
+</tr> 
+</table> 
+</body> 
+
+Efectos:
+- El body tiene clase "contenido" -> esta clase se hereda a los hijos
+- El párrafo sin clase: hereda font-size: 14px y font-weight: bold del .contenido
+- Color del párrafo: green (del selector universal *) porque no hay declaración específica para p
+- La tabla también hereda las propiedades del .contenido
+- El enlace: igual que en el código 1
+
+Diferencias principales:
+- En código 1: el estilo se aplica directamente al elemento p con clase "contenido"
+- En código 2: el estilo se hereda del body a los elementos hijos
+- El style inline en código 1 tiene mayor prioridad que la clase
+
+Ejercicio 5: En cada caso, declarar una regla CSS que produzca el siguiente efecto:
+
+1. Los textos enfatizados dentro de cualquier título deben ser rojos.
+   Código CSS:
+   h1 em, h2 em, h3 em, h4 em, h5 em, h6 em { color: red; }
+   O más简洁:
+   h1 em, h2 em, h3 em, h4 em, h5 em, h6 em { color: red; }
+
+2. Cualquier elemento que tenga asignado el atributo "href" y que esté dentro de cualquier párrafo que a su vez esté dentro de un bloque debe ser color negro.
+   Código CSS:
+   block p a[href] { color: black; }
+
+3. El texto de las listas no ordenadas que estén dentro del bloque identificado como "ultimo" debe ser amarillo pero si es un enlace a otra página debe ser azul.
+   Código CSS:
+   #ultimo ul { color: yellow; }
+   #ultimo ul a { color: blue; }
+
+4. Los elementos identificados como "importante" dentro de cualquier bloque deben ser verdes, pero si están dentro de un título deben ser rojos.
+   Código CSS:
+   .importante { color: green; }
+   h1 .importante, h2 .importante, h3 .importante { color: red; }
+
+5. Todos los elementos h1 que especifique el atributo title, cualquiera que sea su valor, deben ser azules.
+   Código CSS:
+   h1[title] { color: blue; }
+
+6. El color de los enlaces en las listas ordenadas debe ser azul para los enlaces aún no visitados, y violeta para los ya visitados y, además, no deben aparecer subrayados.
+   Código CSS:
+   ol a:link { color: blue; text-decoration: none; }
+   ol a:visited { color: violet; text-decoration: none; }
+
+
+Ejercicio 6: Dado los códigos de los documentos principal.html y estilo2.css, realizar las modificaciones necesarias en el documento HTML para reemplazar la hoja de estilo interna por la externa estilo2.css (sin modificarla) y obtener la misma salida en el navegador.
+
+El ejercicio requiere modificar el archivo HTML principal.html para:
+1. Eliminar todo el contenido entre las etiquetas <style> y </style> (líneas 6-60 aproximadamente)
+2. Agregar un enlace a la hoja de estilo externa usando <link>
+
+Modificaciones necesarias en principal.html:
+
+A) Eliminar estas líneas del <head>:
+   <style>
+   [todo el contenido de estilos internos]
+   </style>
+
+B) Agregar después de <META>:
+   <link rel="stylesheet" href="estilo2.css" type="text/css">
+
+C) Verificar que los IDs en el HTML coincidan con los selectores en estilo2.css:
+   - #titulo en HTML -> #encabezado en CSS (se debe cambiar el ID en el HTML de "titulo" a "encabezado")
+   - O cambiar el selector en CSS de #encabezado a #titulo
+
+D) Cambiar en el HTML:
+   De: <DIV id=titulo>
+   A:  <DIV id=encabezado>
+
+E) En las listas, agregar la clase "vineta" para que aplique el estilo de lista:
+   Cambiar <UL> a <UL class="vineta">
+
+F) En el pie de página, agregar la clase "estilopie":
+   Cambiar <DIV id=pie> a <DIV id=pie class="estilopie">
+
+
+
+
