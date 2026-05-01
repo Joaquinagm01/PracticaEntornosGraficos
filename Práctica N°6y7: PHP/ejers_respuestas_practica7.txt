@@ -1,0 +1,248 @@
+PRÁCTICA N°7 - PHP
+Entornos Gráficos - UTN
+Tema: Manejo de Cookies y Sesiones
+
+EJERCICIO 1
+
+Crear una página configurable con distintos estilos CSS y recordar la
+preferencia del usuario.
+
+Solución: guardar el estilo elegido en cookie.
+
+index.php
+<?php
+$estilo = $_COOKIE['estilo'] ?? 'claro';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$estilo = $_POST['estilo'] ?? 'claro';
+		setcookie('estilo', $estilo, time() + 60 * 60 * 24 * 30, '/');
+}
+?>
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" href="<?php echo $estilo; ?>.css">
+</head>
+<body>
+	<form method="post">
+		<select name="estilo">
+			<option value="claro">Claro</option>
+			<option value="oscuro">Oscuro</option>
+			<option value="azul">Azul</option>
+		</select>
+		<button type="submit">Guardar estilo</button>
+	</form>
+</body>
+</html>
+
+EJERCICIO 2
+Cookie "contador" para saber cuántas veces se visitó contador.php.
+
+contador.php
+<?php
+$contador = 0;
+
+if (isset($_COOKIE['contador'])) {
+		$contador = (int) $_COOKIE['contador'] + 1;
+		echo "Visitaste esta página $contador veces.";
+} else {
+		$contador = 1;
+		echo "Bienvenido. Esta es tu primera visita.";
+}
+
+setcookie('contador', (string) $contador, time() + 60 * 60 * 24 * 365, '/');
+?>
+
+EJERCICIO 3
+Formulario que guarde el último nombre de usuario en cookie.
+
+usuario.php
+<?php
+$ultimo = $_COOKIE['ultimo_usuario'] ?? '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$usuario = trim($_POST['usuario'] ?? '');
+		if ($usuario !== '') {
+				setcookie('ultimo_usuario', $usuario, time() + 60 * 60 * 24 * 30, '/');
+				$ultimo = $usuario;
+		}
+}
+?>
+<form method="post">
+	<label>Usuario:</label>
+	<input type="text" name="usuario">
+	<button type="submit">Guardar</button>
+</form>
+<?php if ($ultimo !== ''): ?>
+<p>Último usuario ingresado: <?php echo htmlspecialchars($ultimo); ?></p>
+<?php endif; ?>
+
+EJERCICIO 4
+Periódico con titulares por tipo, seleccionado por radio y almacenado en
+cookie. La primera vez muestra los 3.
+
+periodico.php
+<?php
+$tipo = $_COOKIE['tipo_titular'] ?? 'todos';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$tipo = $_POST['tipo'] ?? 'todos';
+		setcookie('tipo_titular', $tipo, time() + 60 * 60 * 24 * 30, '/');
+}
+?>
+<form method="post">
+	<label><input type="radio" name="tipo" value="politica"> Política</label>
+	<label><input type="radio" name="tipo" value="economica"> Económica</label>
+	<label><input type="radio" name="tipo" value="deportiva"> Deportiva</label>
+	<button type="submit">Aplicar</button>
+</form>
+
+<?php
+if ($tipo === 'todos' || $tipo === 'politica') echo '<h3>Noticia política</h3>';
+if ($tipo === 'todos' || $tipo === 'economica') echo '<h3>Noticia económica</h3>';
+if ($tipo === 'todos' || $tipo === 'deportiva') echo '<h3>Noticia deportiva</h3>';
+?>
+
+<a href="borrar_titular.php">Borrar preferencia</a>
+
+borrar_titular.php
+<?php
+setcookie('tipo_titular', '', time() - 3600, '/');
+header('Location: periodico.php');
+exit;
+?>
+
+EJERCICIO 5
+Tres páginas: cargar usuario/clave, crear variables de sesión, recuperarlas.
+
+login.php
+<?php
+?>
+<form action="crear_sesion.php" method="post">
+	<input type="text" name="usuario" placeholder="Usuario">
+	<input type="password" name="clave" placeholder="Clave">
+	<button type="submit">Ingresar</button>
+</form>
+
+crear_sesion.php
+<?php
+session_start();
+$_SESSION['usuario'] = $_POST['usuario'] ?? '';
+$_SESSION['clave'] = $_POST['clave'] ?? '';
+header('Location: ver_sesion.php');
+exit;
+?>
+
+ver_sesion.php
+<?php
+session_start();
+echo 'Usuario: ' . htmlspecialchars($_SESSION['usuario'] ?? '');
+echo '<br>Clave: ' . htmlspecialchars($_SESSION['clave'] ?? '');
+?>
+
+EJERCICIO 6
+Pedir mail, buscar en tabla alumnos y guardar nombre en sesión.
+
+Base de datos: base2
+Tabla alumnos(codigo, nombre, codigocurso, mail)
+
+buscar_alumno.php
+<?php
+session_start();
+$link = mysqli_connect('localhost', 'root', '', 'base2');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$mail = $_POST['mail'] ?? '';
+		$stmt = mysqli_prepare($link, 'SELECT nombre FROM alumnos WHERE mail = ?');
+		mysqli_stmt_bind_param($stmt, 's', $mail);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $nombre);
+
+		if (mysqli_stmt_fetch($stmt)) {
+				$_SESSION['nombre'] = $nombre;
+				echo 'Alumno encontrado y guardado en sesión.';
+		} else {
+				echo 'No existe alumno con ese mail.';
+		}
+}
+?>
+
+bienvenida_alumno.php
+<?php
+session_start();
+if (isset($_SESSION['nombre'])) {
+		echo 'Bienvenido/a ' . htmlspecialchars($_SESSION['nombre']);
+} else {
+		echo 'No puede visitar esta página.';
+}
+?>
+
+=======================================================================
+EJERCICIO 7
+=======================================================================
+Carrito de compras simple usando base de datos.
+
+Base de datos: Compras
+Tabla catalogo:
+
+CREATE DATABASE Compras;
+USE Compras;
+CREATE TABLE catalogo (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	producto VARCHAR(100) NOT NULL,
+	precio DECIMAL(9,2) NOT NULL
+);
+
+Lógica mínima:
+
+- Mostrar productos desde catalogo.
+- Botón "Agregar" por producto.
+- Guardar carrito en $_SESSION['carrito'] (id => cantidad).
+- Calcular total sumando precio * cantidad.
+
+Ejemplo agregar.php
+<?php
+session_start();
+$id = (int) ($_GET['id'] ?? 0);
+if (!isset($_SESSION['carrito'])) $_SESSION['carrito'] = [];
+$_SESSION['carrito'][$id] = ($_SESSION['carrito'][$id] ?? 0) + 1;
+header('Location: catalogo.php');
+exit;
+?>
+
+EJERCICIO 8
+Buscador de canciones con base de datos.
+
+Base de datos: prueba
+Tabla buscador(canciones)
+
+CREATE DATABASE prueba;
+USE prueba;
+CREATE TABLE buscador (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	canciones VARCHAR(120) NOT NULL
+);
+
+buscador.php
+<?php
+$link = mysqli_connect('localhost', 'root', '', 'prueba');
+$q = trim($_GET['q'] ?? '');
+
+if ($q !== '') {
+		$sql = "SELECT canciones FROM buscador WHERE canciones LIKE ?";
+		$stmt = mysqli_prepare($link, $sql);
+		$like = "%$q%";
+		mysqli_stmt_bind_param($stmt, 's', $like);
+		mysqli_stmt_execute($stmt);
+		$res = mysqli_stmt_get_result($stmt);
+
+		while ($fila = mysqli_fetch_assoc($res)) {
+				echo htmlspecialchars($fila['canciones']) . '<br>';
+		}
+}
+?>
+<form method="get">
+	<input type="text" name="q" placeholder="Buscar canción">
+	<button type="submit">Buscar</button>
+</form>
+
+

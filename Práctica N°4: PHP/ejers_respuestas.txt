@@ -1,0 +1,442 @@
+=======================================================================
+PRÁCTICA N°4 - PHP
+Universidad Tecnológica Nacional
+Entornos Gráficos
+Respuestas a los ejercicios
+=======================================================================
+
+PRIMERA PARTE: Variables, tipos, operadores, expresiones, estructuras de control
+=======================================================================
+
+Ejercicio 1:  
+En el siguiente código identificar: 
+• las variables y su tipo 
+• los operadores 
+• las funciones y sus parámetros 
+• las estructuras de control 
+• cuál es la salida por pantalla 
+
+El código del ejercicio no está completo en el PDF, pero basándome en el contexto general:
+
+a) $a = TRUE;    -> Variable boolean
+   $b = "xyz";   -> Variable string
+   $c = 'xyz';   -> Variable string
+   $d = 12;      -> Variable integer
+
+   gettype($a)   -> Función que devuelve el tipo de variable; resultado: boolean
+   gettype($b)   -> resultado: string
+   gettype($c)   -> resultado: string  
+   gettype($d)    -> resultado: integer
+
+   is_int($d)     -> Función que verifica si es entero; resultado: true
+   $d += 4;       -> Operador de asignación compuesta; $d = 16
+
+   is_string($a)  -> Función que verifica si es string; resultado: false
+
+   $d = $a ? ++$d : $d*3;  -> Operador ternario: si $a es true, $d = ++$d (17), sino $d*3
+
+   $f = doble($d++);      -> Llama a función doble(), pasando $d (17) y luego incrementa
+   $g = $f += 10;        -> Asignación compuesta: $f = $f + 10, luego $g = $f
+
+   echo $a, $b, $c, $d, $f, $g;  -> Salida por pantalla
+
+Operadores identificados:
+- Aritméticos: +, *, /
+- Comparación: ==, ?
+- Asignación: =, +=, ++, -=
+- Lógicos: !
+
+Funciones:
+- gettype($var) - Devuelve el tipo de la variable
+- is_int($var) - Verifica si es entero
+- is_string($var) - Verifica si es string
+- doble($i) - Función definida que duplica el valor
+
+Estructuras de control:
+- if - Condicional
+- Operador ternario (?)
+
+=======================================================================
+Ejercicio 2: Indicar si los siguientes códigos son equivalentes.
+=======================================================================
+
+a) Todos los códigos del punto a) son EQUIVALENTES. Todos muestran los números del 1 al 10.
+
+Código 1:
+<?php 
+$i = 1; 
+while ($i <= 10) { 
+    print $i++;   
+} 
+?>
+- Inicializa $i = 1
+- While condición: $i <= 10
+- Imprime y luego incrementa
+
+Código 2:
+<?php 
+$i = 1; 
+while ($i <= 10): 
+    print $i; 
+    $i++; 
+endwhile; 
+?>
+- Sintaxis alternativa con:endwhile
+
+Código 3:
+<?php 
+$i = 0; 
+do { 
+    print ++$i; 
+} while ($i<10); 
+?>
+- Usa do-while (incrementa antes de imprimir)
+- Inicia en 0, pre-incrementa a 1
+
+Código 4:
+<?php 
+for ($i = 1; $i <= 10; $i++) { 
+     print $i; 
+} 
+?>
+- For tradicional
+
+Código 5:
+<?php 
+for ($i = 1; ; $i++) { 
+     if ($i > 10) { 
+         break; 
+     } 
+     print $i; 
+} 
+?>
+- For sin condición inicial, usa break
+
+Código 6:
+<?php 
+$i = 1; 
+for (;;) { 
+     if ($i > 10) { 
+         break; 
+     } 
+     print $i; 
+     $i++; 
+} 
+?>
+- For vacío, con manually incremento
+
+Código 7:
+<?php 
+for ($i = 1; $i <= 10; print $i, $i++) ; 
+?>
+- For condensed, print en la expresión del ciclo
+
+RESPUESTA: Todos son equivalentes porque todos producen la salida: 12345678910
+
+=======================================================================
+Ejercicio 3: Explicar para qué se utiliza el siguiente código:
+=======================================================================
+
+a) Ambos códigos son EQUIVALENTES - Usan if-elseif vs switch
+
+Código 1 (if-elseif):
+<?php 
+... 
+if ($i == 0) { 
+    print "i equals 0"; 
+} elseif ($i == 1) { 
+    print "i equals 1"; 
+} elseif ($i == 2) { 
+    print "i equals 2"; 
+} 
+?>
+
+Código 2 (switch):
+<?php 
+... 
+switch ($i) { 
+    case 0: 
+        print "i equals 0"; 
+        break; 
+    case 1: 
+        print "i equals 1"; 
+        break; 
+    case 2: 
+        print "i equals 2"; 
+        break; 
+} 
+?>
+
+Explicación: Ambos imprimen un mensaje según el valor de $i (0, 1, o 2). El switch es más eficiente para múltiples casos.
+
+b) Código para generar una tabla HTML dinámicamente:
+
+<html> 
+<head><title>Documento 1</title></head> 
+<body> 
+<?php 
+    echo "<table width='90%' border='1'>"; 
+    $row = 5; 
+    $col = 2; 
+    for ($r = 1; $r <= $row; $r++) { 
+        echo "<tr>";  
+        for ($c = 1; $c <= $col; $c++) { 
+            echo "<td>&nbsp;</td>\n"; 
+        }      
+        echo "</tr>\n"; 
+    } 
+    echo "</table>\n"; 
+?> 
+</body></html> 
+
+Salida: Una tabla HTML con 5 filas y 2 columnas.
+
+c) Formulario que verifica mayoría de edad:
+
+<html> 
+<head><title>Documento 2</title></head> 
+<body> 
+<?php 
+if (!isset($_POST['submit'])) { 
+?> 
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post"> 
+    Edad: <input name="age" size="2"> 
+    <input type="submit" name="submit" value="Ir"> 
+    </form> 
+<?php 
+} else { 
+    $age = $_POST['age']; 
+    if ($age >= 21) { 
+        echo 'Mayor de edad'; 
+    } else { 
+        echo 'Menor de edad'; 
+    } 
+} 
+?> 
+</body></html> 
+
+Funcionamiento:
+- Si no se envió el formulario, muestra el formulario de edad
+- Si se enviou, verifica si age >= 21
+- Imprime "Mayor de edad" o "Menor de edad"
+
+=======================================================================
+Ejercicio 4:  
+Indicar las salidas que produce el siguiente código. Justificar.
+
+Archivo datos.php:
+<?php 
+$color = 'blanco'; 
+$flor = 'clavel'; 
+?> 
+
+Código principal:
+<?php 
+echo "El $flor $color \n";    
+include 'datos.php'; 
+echo " El $flor $color";    
+?>  
+
+Salida por pantalla:
+"El " (primer echo se ejecuta ANTES del include)
+" El clavel blanco" (después del include, las variables están definidas)
+
+Justificación:
+- El primer echo "El $flor $color \n" se ejecuta antes del include, cuando las variables $flor y $color NO están definidas. PHP intenta usar las variables pero como no existen, simplemente muestra "El " más un espacio en blanco.
+- El include 'datos.php' carga y ejecuta el contenido del archivo datos.php, definiendo las variables $color = 'blanco' y $flor = 'clavel'.
+- El segundo echo " El $flor $color" se ejecuta DESPUÉS del include, por lo que las variables ya existen y se sustituyen correctamente.
+
+=======================================================================
+Ejercicio 5: Analizar el siguiente ejemplo: Contador de visitas a una página web
+=======================================================================
+
+contador.php:
+<?
+// Archivo para acumular el numero de visitas 
+$archivo = "contador.dat"; 
+// Abrir el archivo para lectura  
+$abrir = fopen($archivo, "r"); 
+// Leer el contenido del archivo 
+$cont = fread($abrir, filesize($archivo)); 
+// Cerrar el archivo 
+fclose($abrir); 
+// Abrir nuevamente el archivo para escritura 
+$abrir = fopen($archivo, "w"); 
+// Agregar 1 visita 
+$cont = $cont + 1; 
+// Guardar la modificación  
+$guardar = fwrite($abrir, $cont); 
+// Cerrar el archivo 
+fclose($abrir); 
+// Mostrar el total de visitas  
+echo "<font face='arial' size='3'>Cantidad de visitas: ".$cont."</font>"; 
+?> 
+
+visitas.php:
+<!-- Página que va a contener al contador de visitas --> 
+<html> 
+<head></head> 
+<body> 
+<? include("contador.php")?>  
+</body> 
+</html> 
+
+Explicación del funcionamiento:
+1. Se crea un archivo contador.dat con un número inicial (ej: 0)
+2. Se dan permisos de lectura y escritura al archivo
+3. Cuando un usuario visita la página, contador.php:
+   - Abre el archivo contador.dat en modo lectura
+   - Lee el número actual de visitas
+   - Cierra el archivo
+   - Lo abre en modo escritura
+   - Incrementa el contador en 1
+   - Guarda el nuevo valor
+   - Cierra el archivo
+   - Muestra el total de visitas
+
+Para probarlo:
+1. Crear archivo contador.dat con valor inicial "0" (o cualquier número)
+2. Asegurar que el servidor tiene permisos de escritura
+3. Acceder a visitas.php desde el navegador
+
+=======================================================================
+SEGUNDA PARTE: PHP: arrays, funciones
+=======================================================================
+
+Ejercicio 1: Indicar si los siguientes códigos son equivalentes.
+=======================================================================
+
+(No hay código completo en el PDF para este ejercicio)
+
+=======================================================================
+Ejercicio 2: En cada caso, indicar las salidas correspondientes:
+=======================================================================
+
+(No hay código completo en el PDF para este ejercicio)
+
+=======================================================================
+Ejercicio 3: En cada caso, indicar las salidas correspondientes:
+=======================================================================
+
+a)
+<?php 
+$matriz = array("x" => "bar", 12 => true); 
+echo $matriz["x"];  
+echo $matriz[12];      
+?> 
+
+Salida: "bar" (para "x") + "1" (para 12, ya que true se muestra como "1")
+
+b)
+<?php 
+$matriz = array("unamatriz" => array(6 => 5, 13 => 9, "a" => 42)); 
+
+echo $matriz["unamatriz"][6];      
+echo $matriz["unamatriz"][13];      
+echo $matriz["unamatriz"]["a"];  
+?> 
+
+Salida: "5" + "9" + "42"
+
+c)
+<?php 
+$matriz = array(5 => 1, 12 => 2); 
+$matriz[] = 56;          // Agrega en siguiente índice (13)
+$matriz["x"] = 42;      // Agrega con clave "x"
+unset($matriz[5]);      // Elimina el índice 5
+unset($matriz);         // Elimina todo el array
+?> 
+
+No hay salida visible, pero el array queda modificado:
+- Inicialmente: [5 => 1, 12 => 2]
+- Después de $matriz[] = 56: [5 => 1, 12 => 2, 13 => 56]
+- Después de $matriz["x"] = 42: [5 => 1, 12 => 2, 13 => 56, "x" => 42]
+- Después de unset($matriz[5]): [12 => 2, 13 => 56, "x" => 42]
+-Después de unset($matriz): array vacío o null
+
+d)
+<?php 
+$a = array( 'color'  => 'rojo', 
+            'sabor'  => 'dulce', 
+            'forma'  => 'redonda', 
+            'nombre' => 'manzana', 
+            4         
+          ); 
+?> 
+
+Array creado con claves: "color"=>"rojo", "sabor"=>"dulce", "forma"=>"redonda", "nombre"=>"manzana", 0=>4
+
+(No hay salida visible)
+
+e)
+<?php 
+$a['color']  = 'rojo'; 
+$a['sabor']  = 'dulce'; 
+$a['forma']  = 'redonda'; 
+$a['nombre'] = 'manzana'; 
+$a[]           = 4;  
+?> 
+
+Array creado con claves: "color"=>"rojo", "sabor"=>"dulce", "forma"=>"redonda", "nombre"=>"manzana", 0=>4
+
+Los códigos d) y e) son EQUIVALENTES - ambos crean el mismo array.
+
+=======================================================================
+Ejercicio 4: Analizar la siguiente función, y escribir un script para probar su funcionamiento:
+=======================================================================
+
+function comprobar_nombre_usuario($nombre_usuario){  
+    // Compruebo que el tamaño del string sea válido  
+    if (strlen($nombre_usuario)<3 || strlen($nombre_usuario)>20){  
+      echo $nombre_usuario . " no es válido<br>";  
+      return false;  
+    }    
+
+    // Compruebo que los caracteres sean los permitidos  
+    $permitidos = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";  
+    for ($i=0; $i<strlen($nombre_usuario); $i++){  
+      if (strpos($permitidos, substr($nombre_usuario,$i,1))===false){  
+         echo $nombre_usuario . " no es válido<br>";  
+         return false;  
+      }  
+    }  
+    echo $nombre_usuario . " es válido<br>";  
+    return true;  
+}  
+
+Explicación:
+- Verifica que el nombre de usuario tenga entre 3 y 20 caracteres
+- Verifica que solo contenga letras (a-z, A-Z), números (0-9), guiones (-) y guiones bajos (_)
+- Retorna true si es válido, false si no lo es
+
+Script para probar:
+<?php
+function comprobar_nombre_usuario($nombre_usuario){  
+    if (strlen($nombre_usuario)<3 || strlen($nombre_usuario)>20){  
+      echo $nombre_usuario . " no es válido<br>";  
+      return false;  
+    }    
+
+    $permitidos = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";  
+    for ($i=0; $i<strlen($nombre_usuario); $i++){  
+      if (strpos($permitidos, substr($nombre_usuario,$i,1))===false){  
+         echo $nombre_usuario . " no es válido<br>";  
+         return false;  
+      }  
+    }  
+    echo $nombre_usuario . " es válido<br>";  
+    return true;  
+}  
+
+// Pruebas
+comprobar_nombre_usuario("Joa");           // Válido (3 chars)
+comprobar_nombre_usuario("Juan");            // Válido
+comprobar_nombre_usuario("Jo");              // Inválido (menos de 3)
+comprobar_nombre_usuario("Juan12345678901"); // Inválido (más de 20)
+comprobar_nombre_usuario("Juan@123");       // Inválido (contiene @)
+comprobar_nombre_usuario("Juan_Perez");       // Válido
+?>
+
+=======================================================================
+FIN DEL DOCUMENTO
+=======================================================================

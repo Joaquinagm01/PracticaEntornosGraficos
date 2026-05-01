@@ -1,0 +1,235 @@
+PRÁCTICA N°6 - PHP
+Entornos Gráficos - UTN
+Tema: Manejo de Bases de Datos con PHP (mysqli)
+
+EJERCICIO 1 - COMPLETAR + EXPLICAR CÓDIGO
+
+Consulta a una base de datos:
+Para comenzar la comunicación con un servidor MySQL es necesario abrir
+una conexión. PHP ofrece la función:
+
+mysqli_connect()
+
+Sus parámetros son opcionales, pero normalmente se usan:
+
+- Host (servidor)
+- Usuario
+- Contraseña
+- (Opcional, pero recomendado) Nombre de base de datos
+
+Una vez abierta la conexión, se puede seleccionar la base de datos con:
+
+mysqli_select_db()
+
+Esta función recibe como parámetro:
+
+- El recurso de conexión
+- El nombre de la base de datos
+
+La función mysqli_query() se utiliza para:
+
+- Ejecutar una consulta SQL (SELECT, INSERT, UPDATE, DELETE, etc.)
+
+Y requiere como parámetros:
+
+- Conexión activa
+- Consulta SQL
+
+La cláusula or die() se utiliza para:
+
+- Cortar la ejecución y mostrar un mensaje de error si la operación falla
+
+La función mysqli_error() se usa para:
+
+- Obtener el detalle del último error generado por MySQL
+
+Ejemplo típico:
+
+<?php
+$link = mysqli_connect("localhost", "root", "", "Capitales")
+	or die("Error de conexión: " . mysqli_connect_error());
+
+$sql = "SELECT id, ciudad, pais FROM ciudades";
+$vResultado = mysqli_query($link, $sql)
+	or die("Error en la consulta: " . mysqli_error($link));
+?>
+
+Explicación del while con mysqli_fetch_array:
+
+<?php
+while ($fila = mysqli_fetch_array($vResultado)) {
+	// En cada vuelta del while se recupera una fila del resultado.
+	// $fila[0], $fila[1], $fila[2] corresponden a columnas del SELECT.
+?>
+	<tr>
+		<td><?php echo $fila[0]; ?></td>
+		<td><?php echo $fila[1]; ?></td>
+		<td><?php echo $fila[2]; ?></td>
+	</tr>
+<?php
+}
+
+// Libera memoria del resultado
+mysqli_free_result($vResultado);
+
+// Cierra conexión
+mysqli_close($link);
+?>
+
+IMPORTANTE:
+En la consigna aparece $fila[2'] (con comilla mal ubicada). Lo correcto es
+$fila[2].
+
+EJERCICIO 2 - ABML DE TABLA CIUDADES (CAPITALES)
+
+Base de datos: Capitales
+Tabla sugerida:
+
+CREATE DATABASE Capitales;
+USE Capitales;
+
+CREATE TABLE ciudades (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ciudad VARCHAR(80) NOT NULL,
+  pais VARCHAR(80) NOT NULL,
+  habitantes INT NOT NULL,
+  superficie DECIMAL(10,2) NOT NULL,
+  tieneMetro TINYINT(1) NOT NULL
+);
+
+INSERT INTO ciudades (ciudad, pais, habitantes, superficie, tieneMetro) VALUES
+('Mexico D.F.', 'Mexico', 555666, 23434.34, 1),
+('Barcelona', 'Espana', 444333, 1111.11, 0),
+('Buenos Aires', 'Argentina', 888111, 333.33, 1),
+('Medellin', 'Colombia', 999222, 888.88, 0),
+('Lima', 'Peru', 999111, 222.22, 0),
+('Caracas', 'Venezuela', 111222, 111.11, 1),
+('Santiago', 'Chile', 777666, 222.22, 1),
+('Antigua Guatemala', 'Guatemala', 444222, 877.33, 0),
+('Quito', 'Ecuador', 333111, 999.11, 1),
+('La Habana', 'Cuba', 111222, 333.11, 0);
+
+Estructura recomendada de archivos:
+
+- conexion.php
+- index.php (menu)
+- alta.php
+- baja.php
+- modificacion.php
+- listado.php (sin paginacion)
+- listado_paginado.php
+
+conexion.php
+<?php
+$link = mysqli_connect("localhost", "root", "", "Capitales");
+if (!$link) {
+	die("Error de conexión: " . mysqli_connect_error());
+}
+?>
+
+index.php (menu)
+<?php
+?>
+<h1>ABML Ciudades</h1>
+<ul>
+  <li><a href="alta.php">Alta</a></li>
+  <li><a href="baja.php">Baja</a></li>
+  <li><a href="modificacion.php">Modificación</a></li>
+  <li><a href="listado.php">Listado sin paginación</a></li>
+  <li><a href="listado_paginado.php">Listado con paginación</a></li>
+</ul>
+
+alta.php (INSERT)
+<?php
+require "conexion.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+	$ciudad = $_POST["ciudad"];
+	$pais = $_POST["pais"];
+	$habitantes = (int) $_POST["habitantes"];
+	$superficie = (float) $_POST["superficie"];
+	$tieneMetro = isset($_POST["tieneMetro"]) ? 1 : 0;
+
+	$sql = "INSERT INTO ciudades (ciudad, pais, habitantes, superficie, tieneMetro)
+			VALUES (?, ?, ?, ?, ?)";
+	$stmt = mysqli_prepare($link, $sql);
+	mysqli_stmt_bind_param($stmt, "ssidi", $ciudad, $pais, $habitantes, $superficie, $tieneMetro);
+	mysqli_stmt_execute($stmt);
+}
+?>
+
+baja.php (DELETE)
+<?php
+require "conexion.php";
+
+if (isset($_GET["id"])) {
+	$id = (int) $_GET["id"];
+	$stmt = mysqli_prepare($link, "DELETE FROM ciudades WHERE id = ?");
+	mysqli_stmt_bind_param($stmt, "i", $id);
+	mysqli_stmt_execute($stmt);
+}
+?>
+
+modificacion.php (UPDATE)
+<?php
+require "conexion.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+	$id = (int) $_POST["id"];
+	$ciudad = $_POST["ciudad"];
+	$pais = $_POST["pais"];
+	$habitantes = (int) $_POST["habitantes"];
+	$superficie = (float) $_POST["superficie"];
+	$tieneMetro = isset($_POST["tieneMetro"]) ? 1 : 0;
+
+	$sql = "UPDATE ciudades
+			SET ciudad = ?, pais = ?, habitantes = ?, superficie = ?, tieneMetro = ?
+			WHERE id = ?";
+	$stmt = mysqli_prepare($link, $sql);
+	mysqli_stmt_bind_param($stmt, "ssidii", $ciudad, $pais, $habitantes, $superficie, $tieneMetro, $id);
+	mysqli_stmt_execute($stmt);
+}
+?>
+
+listado.php (sin paginación)
+<?php
+require "conexion.php";
+$res = mysqli_query($link, "SELECT * FROM ciudades ORDER BY id");
+while ($fila = mysqli_fetch_assoc($res)) {
+	echo $fila["id"] . " - " . $fila["ciudad"] . " - " . $fila["pais"] . "<br>";
+}
+mysqli_free_result($res);
+mysqli_close($link);
+?>
+
+listado_paginado.php (con paginación)
+<?php
+require "conexion.php";
+
+$porPagina = 5;
+$pagina = isset($_GET["pagina"]) ? max(1, (int) $_GET["pagina"]) : 1;
+$offset = ($pagina - 1) * $porPagina;
+
+$totalRes = mysqli_query($link, "SELECT COUNT(*) AS total FROM ciudades");
+$total = (int) mysqli_fetch_assoc($totalRes)["total"];
+$totalPaginas = (int) ceil($total / $porPagina);
+
+$sql = "SELECT * FROM ciudades ORDER BY id LIMIT $offset, $porPagina";
+$res = mysqli_query($link, $sql);
+
+while ($fila = mysqli_fetch_assoc($res)) {
+	echo $fila["id"] . " - " . $fila["ciudad"] . " - " . $fila["pais"] . "<br>";
+}
+
+for ($i = 1; $i <= $totalPaginas; $i++) {
+	echo '<a href="listado_paginado.php?pagina=' . $i . '">[' . $i . ']</a> ';
+}
+
+mysqli_free_result($res);
+mysqli_close($link);
+?>
+
+Conclusión:
+Queda implementado el ABML completo con MySQL y PHP, incluyendo listado
+tradicional y paginado.
+

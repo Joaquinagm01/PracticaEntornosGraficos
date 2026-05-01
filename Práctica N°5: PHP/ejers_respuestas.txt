@@ -1,0 +1,437 @@
+=======================================================================
+PRÁCTICA N°5 - PHP
+Universidad Tecnológica Nacional
+Entornos Gráficos
+Respuestas a los ejercicios
+=======================================================================
+
+PRIMERA PARTE: Función mail()
+=======================================================================
+
+La función mail() en PHP:
+bool mail ( string $to, string $subject, string $message [, string $additional_headers [, string $additional_parameters ]] )
+
+=======================================================================
+Ejercicio 1:  
+Escribir un script en PHP para poder enviar un correo electrónico, con formato HTML, a través del servidor.
+=======================================================================
+
+<?php
+// Script para enviar correo electrónico con formato HTML
+
+$destinatario = "destinatario@ejemplo.com";
+$asunto = "Correo de prueba con formato HTML";
+
+// Cuerpo del mensaje en formato HTML
+$cuerpo = '
+<html>
+<head>
+  <title>Correo de Prueba</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .encabezado { background-color: #0066CC; color: white; padding: 10px; }
+    .contenido { padding: 20px; }
+    .pie { background-color: #f0f0f0; padding: 10px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="encabezado">
+    <h1>Encabezado del mensaje</h1>
+  </div>
+  <div class="contenido">
+    <p>Este es un mensaje de prueba enviado desde PHP con formato HTML.</p>
+    <p>Puedes incluir imágenes, enlaces, tablas, etc.</p>
+    <p>Saludos,<br>El equipo</p>
+  </div>
+  <div class="pie">
+    <p>Este correo fue enviado automáticamente. Por favor no responder.</p>
+  </div>
+</body>
+</html>
+';
+
+// Encabezados adicionales para formato HTML
+$headers = "MIME-Version: 1.0\r\n";
+$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+$headers .= "From: remitente@ejemplo.com\r\n";
+$headers .= "Reply-To: respuesta@ejemplo.com\r\n";
+
+// Enviar el correo
+$enviado = mail($destinatario, $asunto, $cuerpos, $headers);
+
+if ($enviado) {
+    echo "El correo fue enviado exitosamente";
+} else {
+    echo "Error al enviar el correo";
+}
+?>
+
+Explicación:
+- Se utiliza la función mail() de PHP
+- Los encabezados MIME-Version y Content-Type indican que el mensaje es HTML
+- Se pueden agregar más encabezados como From, Reply-To, CC, BCC, etc.
+- La función retorna true si el correo fue enviado al servidor de correo, false en caso de error
+
+=======================================================================
+Ejercicio 2:  
+Confeccionar una página de Contacto que presente un formulario para que los visitantes puedan enviar consultas al webmaster.
+=======================================================================
+
+contacto.php:
+<?php
+session_start();
+
+// Variables para mensajes
+$mensaje = "";
+
+// Procesar el formulario cuando se envíe
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nombre = $_POST["nombre"] ?? "";
+    $email = $_POST["email"] ?? "";
+    $asunto = $_POST["asunto"] ?? "";
+    $consulta = $_POST["consulta"] ?? "";
+    
+    // Validar que los campos no estén vacíos
+    if (empty($nombre) || empty($email) || empty($consulta)) {
+        $mensaje = "Por favor complete todos los campos obligatorios";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $mensaje = "El correo electrónico no es válido";
+    } else {
+        // Enviar correo al webmaster
+        $destinatario = "webmaster@ejemplo.com";
+        $asunto_webmaster = "Nueva consulta desde formulario de contacto: $asunto";
+        
+        $cuerpo = "
+        <html>
+        <head><title>Nueva Consulta</title></head>
+        <body>
+            <h2>Nueva consulta recibida</h2>
+            <p><strong>Nombre:</strong> $nombre</p>
+            <p><strong>Email:</strong> $email</p>
+            <p><strong>Asunto:</strong> $asunto</p>
+            <p><strong>Consulta:</strong></p>
+            <p>$consulta</p>
+        </body>
+        </html>
+        ";
+        
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: $email\r\n";
+        
+        if (mail($destinatario, $asunto_webmaster, $cuerpo, $headers)) {
+            $mensaje = "Su consulta ha sido enviada. Nos pondremos en contacto pronto.";
+        } else {
+            $mensaje = "Error al enviar la consulta. Intente más tarde.";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 500px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input[type="text"], input[type="email"], textarea { 
+            width: 100%; padding: 8px; margin-top: 5px; 
+        }
+        textarea { height: 150px; }
+        input[type="submit"] { 
+            margin-top: 15px; padding: 10px 20px; 
+            background-color: #0066CC; color: white; border: none; 
+        }
+        .mensaje { padding: 10px; margin-bottom: 10px; }
+        .error { background-color: #ffcccc; color: #cc0000; }
+        .success { background-color: #ccffcc; color: #006600; }
+    </style>
+</head>
+<body>
+    <h1>Formulario de Contacto</h1>
+    
+    <?php if ($mensaje): ?>
+        <div class="mensaje <?php echo strpos($mensaje, 'Error') !== false ? 'error' : 'success'; ?>">
+            <?php echo htmlspecialchars($mensaje); ?>
+        </div>
+    <?php endif; ?>
+    
+    <form method="POST" action="">
+        <label for="nombre">Nombre *:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        
+        <label for="email">Email *:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="asunto">Asunto:</label>
+        <input type="text" id="asunto" name="asunto">
+        
+        <label for="consulta">Consulta *:</label>
+        <textarea id="consulta" name="consulta" required></textarea>
+        
+        <input type="submit" value="Enviar Consulta">
+    </form>
+    
+    <p><small>* Campos obligatorios</small></p>
+</body>
+</html>
+
+=======================================================================
+Ejercicio 3:  
+Escribir un script para que un visitante recomiende el sitio a un amigo.
+=======================================================================
+
+recomendar.php:
+<?php
+session_start();
+
+$mensaje = "";
+
+// Procesar cuando se envíe el formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $tu_email = $_POST["tu_email"] ?? "";
+    $nombre_amigo = $_POST["nombre_amigo"] ?? "";
+    $email_amigo = $_POST["email_amigo"] ?? "";
+    $comentario = $_POST["comentario"] ?? "";
+    
+    // Validar
+    if (empty($tu_email) || empty($nombre_amigo) || empty($email_amigo)) {
+        $mensaje = "Por favor complete todos los campos obligatorios";
+    } elseif (!filter_var($tu_email, FILTER_VALIDATE_EMAIL) || 
+              !filter_var($email_amigo, FILTER_VALIDATE_EMAIL)) {
+        $mensaje = "Los correos electrónicos no son válidos";
+    } else {
+        // Enviar correo de recomendación
+        $asunto = "$tu_email te recomienda nuestro sitio";
+        
+        $cuerpo = "
+        <html>
+        <head><title>Recomendación</title></head>
+        <body>
+            <h2>¡Hola $nombre_amigo!</h2>
+            <p>Tu amigo ($tu_email) te recomienda que visites nuestro sitio.</p>
+            <p>Dice: <em>\"$comentario\"</em></p>
+            <p>Puedes visitarnos en: <a href='http://www.ejemplo.com'>www.ejemplo.com</a></p>
+            <p>¡Gracias por tu interés!</p>
+        </body>
+        </html>
+        ";
+        
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: $tu_email\r\n";
+        
+        if (mail($email_amigo, $asunto, $cuerpo, $headers)) {
+            $mensaje = "La recomendación ha sido enviada a $nombre_amigo";
+        } else {
+            $mensaje = "Error al enviar la recomendación. Intente más tarde.";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendar a un amigo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 500px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input[type="text"], input[type="email"], textarea { 
+            width: 100%; padding: 8px; margin-top: 5px; 
+        }
+        textarea { height: 80px; }
+        input[type="submit"] { 
+            margin-top: 15px; padding: 10px 20px; 
+            background-color: #28a745; color: white; border: none; 
+        }
+        .mensaje { padding: 10px; margin-bottom: 10px; }
+        .error { background-color: #ffcccc; color: #cc0000; }
+        .success { background-color: #ccffcc; color: #006600; }
+    </style>
+</head>
+<body>
+    <h1>Recomienda nuestro sitio a un amigo</h1>
+    
+    <?php if ($mensaje): ?>
+        <div class="mensaje <?php echo strpos($mensaje, 'Error') !== false ? 'error' : 'success'; ?>">
+            <?php echo htmlspecialchars($mensaje); ?>
+        </div>
+    <?php endif; ?>
+    
+    <form method="POST" action="">
+        <label for="tu_email">Tu correo electrónico *:</label>
+        <input type="email" id="tu_email" name="tu_email" required>
+        
+        <label for="nombre_amigo">Nombre de tu amigo *:</label>
+        <input type="text" id="nombre_amigo" name="nombre_amigo" required>
+        
+        <label for="email_amigo">Correo de tu amigo *:</label>
+        <input type="email" id="email_amigo" name="email_amigo" required>
+        
+        <label for="comentario">Comentario (opcional):</label>
+        <textarea id="comentario" name="comentario" placeholder="¿Por qué recomiendas nuestro sitio?"></textarea>
+        
+        <input type="submit" value="Recomendar">
+    </form>
+    
+    <p><small>* Campos obligatorios</small></p>
+</body>
+</html>
+
+=======================================================================
+SEGUNDA PARTE: Variables de sesión
+=======================================================================
+
+La función session_start() inicia una sesión para el usuario o continúa la sesión abierta en otras páginas.
+La sesión se tiene que inicializar antes de escribir cualquier texto en la página.
+
+Una vez inicializada, se pueden utilizar variables de sesión a través del array asociativo $_SESSION["nombre_variable"], 
+es decir, almacenar datos para ese usuario que se conserven durante toda su visita o recuperar datos 
+almacenados en páginas que haya visitado.
+
+=======================================================================
+Ejercicio 4:  
+Contar las páginas visitadas por un usuario durante su sesión.
+=======================================================================
+
+contador_visitas.php:
+<?php
+// Iniciar la sesión al principio (antes de cualquier output)
+session_start();
+
+// Inicializar contador de páginas si no existe
+if (!isset($_SESSION['contador_paginas'])) {
+    $_SESSION['contador_paginas'] = 0;
+}
+
+// Incrementar el contador
+$_SESSION['contador_paginas']++;
+
+// Obtener información de la sesión
+$visitas = $_SESSION['contador_paginas'];
+$session_id = session_id();
+
+echo "<h2>Contador de páginas</h2>";
+echo "<p>Has visitado <strong>$visitas</strong> página(s) en esta sesión.</p>";
+echo "<p>ID de sesión: $session_id</p>";
+
+// Mostrar tiempo de la sesión
+if (isset($_SESSION['ultima_visita'])) {
+    echo "<p>Última visita: " . $_SESSION['ultima_visita'] . "</p>";
+}
+
+// Actualizar última visita
+$_SESSION['ultima_visita'] = date("Y-m-d H:i:s");
+
+// Opcional: guardar URL actual
+$_SESSION['pagina_actual'] = $_SERVER['REQUEST_URI'];
+
+// Opcional: almacenar historial de páginas visitadas
+if (!isset($_SESSION['historial'])) {
+    $_SESSION['historial'] = array();
+}
+$_SESSION['historial'][] = array(
+    'pagina' => $_SERVER['REQUEST_URI'],
+    'tiempo' => date("H:i:s")
+);
+
+echo "<p>Gracias por visitar nuestro sitio.</p>";
+echo "<p><a href='otra_pagina.php'>Ir a otra página para incrementar el contador</a></p>";
+?>
+
+otra_pagina.php:
+<?php
+// Esta es otra página para demostrar que el contador funciona entre páginas
+session_start();
+
+if (!isset($_SESSION['contador_paginas'])) {
+    $_SESSION['contador_paginas'] = 0;
+}
+
+$_SESSION['contador_paginas']++;
+
+echo "<h2>Otra Página</h2>";
+echo "<p>Has visitado <strong>" . $_SESSION['contador_paginas'] . "</strong> página(s) en esta sesión.</p>";
+echo "<p><a href='contador_visitas.php'>Volver al contador</a></p>";
+
+if (isset($_SESSION['historial'])) {
+    echo "<h3>Historial de páginas:</h3>";
+    echo "<ul>";
+    foreach ($_SESSION['historial'] as $index => $pagina) {
+        echo "<li>Página " . ($index + 1) . ": " . $pagina['pagina'] . 
+             " a las " . $pagina['tiempo'] . "</li>";
+    }
+    echo "</ul>";
+}
+?>
+
+explicación del funcionamiento:
+1. session_start() debe llamarse al principio de cada página que use sesiones
+2. $_SESSION es un array asociativo que persiste durante toda la sesión del usuario
+3. Cada vez que el usuario visita una página, incrementamos $_SESSION['contador_paginas']
+4. El contador se mantiene entre distintas páginas del mismo sitio
+5. La sesión termina cuando el usuario cierra el navegador o expira el tiempo de sesión
+
+Para probar:
+1. Asegurar que PHP tiene soporte para sesiones configurado (session_start() debe funcionar)
+2. Abrir contador_visitas.php en el navegador
+3. Navegar a otras páginas del sitio
+4. El contador debería incrementarse en cada página
+
+=======================================================================
+OTROS EJEMPLOS DE VARIABLES DE SESIÓN
+=======================================================================
+
+Ejemplo: Carrito de compras simple con sesiones
+
+carrito.php:
+<?php
+session_start();
+
+$carrito = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : array();
+
+if (isset($_POST['agregar'])) {
+    $producto = $_POST['producto'];
+    $carrito[] = $producto;
+    $_SESSION['carrito'] = $carrito;
+}
+
+echo "<h2>Carrito de Compras</h2>";
+echo "<p>Productos en el carrito: " . count($carrito) . "</p>";
+
+if (count($carrito) > 0) {
+    echo "<ul>";
+    foreach ($carrito as $item) {
+        echo "<li>$item</li>";
+    }
+    echo "</ul>";
+}
+?>
+
+<form method="POST">
+    <input type="text" name="producto" placeholder="Nombre del producto" required>
+    <input type="submit" name="agregar" value="Agregar al carrito">
+</form>
+
+<form action="vaciar_carrito.php" method="POST">
+    <input type="submit" name="vaciar" value="Vaciar carrito">
+</form>
+
+vaciar_carrito.php:
+<?php
+session_start();
+$_SESSION['carrito'] = array();
+header("Location: carrito.php");
+?>
+
+=======================================================================
+FIN DEL DOCUMENTO
+=======================================================================
