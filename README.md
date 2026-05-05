@@ -1,89 +1,83 @@
-# Repositorio de Prácticas - Entornos Gráficos
+# Repositorio de Prácticas - Entornos Gráficos UTN
 
-Este repositorio reúne las prácticas de la materia Entornos Gráficos de la UTN.
+Este repositorio contiene las prácticas de la materia **Entornos Gráficos** de la UTN, cubriendo HTML5, CSS3, Bootstrap 5 y PHP con MySQLi.
 
-## Objetivo
+## 📋 Índice de Prácticas
 
-Guardar, organizar y versionar los trabajos prácticos desarrollados durante la cursada.
+| Práctica | Tema | Archivos Principales |
+|----------|------|---------------------|
+| [N°1: HTML](Práctica%20N°1:%20HTML/) | HTML5 fundamentals (audio, video, forms) | `ejercitacion*.html`, `ejers_respuestas.txt` |
+| [N°2: CSS](Práctica%20N°2:%20CSS/) | CSS selectors, cascade, inheritance, pseudo-classes | `ejers_respuestas.txt`, `UTN_Entornos Gráficos_CSS Práctica 2.pdf` |
+| [N°3: Bootstrap](Práctica%20N°3:%20Bootstrap/) | Bootstrap 5 grids, cards, modals, sliders, forms | `index.html`, `formulario_contacto.html`, `Consigna.md` |
+| [N°4: PHP Básico](Práctica%20N°4:%20PHP/) | Variables, operators, control structures, arrays, functions | `ejers_respuestas.txt` |
+| [N°5: PHP Avanzado I](Práctica%20N°5:%20PHP/) | mail(), sessions, contact forms | `ejers_respuestas.txt` |
+| [N°6: PHP MySQLi](Práctica%20N°6y7:%20PHP/) | Database connection, queries, ABML CRUD, pagination | `ejers_respuestas_practica6.txt`, `UTN_Entornos_Gráficos_Práctica6.pdf` |
+| [N°7: PHP Cookies/Sesiones](Práctica%20N°6y7:%20PHP/) | Cookies (styles, counters), sessions (login, cart), search | `ejers_respuestas_practica7.txt`, `UTN_Entornos_Gráficos_Práctica7.pdf` |
 
-## Estructura del repositorio
+## 🚀 Cómo Ejecutar
 
-- Práctica N°1: HTML
-- Práctica N°2: Bootstrap
-- Práctica N°4: PHP 
-- Práctica N°5: PHP 
+- **HTML/CSS/Bootstrap**: Abrir archivos `.html` directamente en el navegador.
+- **PHP**: Requiere servidor web (XAMPP/WAMP/MAMP) + MySQL para prácticas 6-7.
+  - Copiar código de `ejers_respuestas*.txt` a archivos `.php`.
+  - Configurar DB 'Capitales' para Práctica 6.
 
----
+## 📚 Detalle de Prácticas
 
-## Práctica N°1: HTML
+### Práctica N°1: HTML5
+Fundamentos HTML5: multimedia y formularios.
+- `ejercitacion2_audio.html`: Audio HTML5
+- `ejercitacion3_video.html`: Video HTML5  
+- `ejercitacion4_formularios.html`: Formularios con validaciones
+- `practica_complementaria_html5_completa.html`: Práctica completa
 
-Introduction to HTML5 fundamentals.
+### Práctica N°2: CSS3
+Teoría CSS: selectores, herencia, cascada, pseudo-clases.
+- Respuestas teóricas detalladas en `ejers_respuestas.txt`
+- Análisis de código y ejercicios prácticos de selectores y reglas CSS
 
-### Contenido
+### Práctica N°3: Bootstrap 5
+Componentes responsive: grids, cards, modals, sliders, formularios.
+- `index.html`: Grids responsive y layout
+- `formulario_contacto.html`: Formulario de contacto
+- `practica2_ejercicio*.html`: Ejercicios adicionales
+- `Consigna.md`: Requisitos detallados (grids, sidebar, alerts, etc.)
 
-- `ejers_respuestas.txt`: Theoretical answers about HTML5 advantages and features.
-- `ejercitacion2_audio.html`: Exercise implementing audio with HTML5.
-- `ejercitacion3_video.html`: Exercise implementing video with HTML5.
-- `ejercitacion4_formularios.html`: Exercises with forms and HTML5 validations.
-- `practica_complementaria_html5_completa.html`: Complete complementary practice.
+### Práctica N°4: PHP Básico
+Fundamentos: variables, tipos, operadores, estructuras de control, arrays, funciones, archivos.
+- Teoría completa en `ejers_respuestas.txt`
 
----
+### Práctica N°5: PHP Avanzado I
+Funciones mail() y variables de sesión.
+- Envío de emails HTML desde formularios
+- Sistema "recomendar a un amigo"
+- Control de visitas con sesiones
+- Detalles en `ejers_respuestas.txt`
 
-## Práctica N°2: Bootstrap
+### Práctica N°6: PHP + MySQLi
+Manejo de bases de datos: conexión, consultas, **ABML completo** (Alta/Baja/Modificación/Listado) de tabla `ciudades`.
+- Conexión `mysqli_connect()`, prepared statements
+- Listado simple y paginado
+- Código completo en `ejers_respuestas_practica6.txt` (conexion.php, alta.php, etc.)
 
-Introduction to Bootstrap framework for responsive design.
+### Práctica N°7: Cookies, Sesiones Avanzadas
+- **Cookies**: Estilos configurables, contadores de visitas, preferencias usuario, periódico por tipo
+- **Sesiones**: Login, búsqueda alumno por email, carrito compras
+- Buscador de canciones con LIKE
+- Código ejemplos en `ejers_respuestas_practica7.txt`
 
-### Contenido
+## 🛠️ Tecnologías
 
-- `index.html`: Practice 1 (installation and introduction) and Practice 2 (responsive grid).
-- `estilo.css`: Custom styles with CSS variables, modern design system.
-- `practica2_ejercicio1.html` and `practica2_ejercicio2.html`: Additional Bootstrap exercises.
-- `formulario_contacto.html`: Contact form implementation.
-- `contacto.html`: Alternative contact page.
-- `Consigna.md`: Practice requirements.
+- **Frontend**: HTML5 (semántica, multimedia), CSS3 (variables, Flexbox/Grid), Bootstrap 5
+- **Backend**: PHP 8+, MySQLi (prepared statements, pagination)
+- **Herramientas**: VS Code, XAMPP (Apache + MySQL)
 
----
+## 📄 Licencia
 
-## Práctica N°4: PHP (Básico)
-
-Introduction to PHP fundamentals: variables, types, operators, control structures, arrays, and functions.
-
-### Contenido
-
-- `ejers_respuestas.txt`: Theory answers covering:
-  - Variables and types (boolean, string, integer)
-  - Operators (assignment, arithmetic, ternary, increment/decrement)
-  - Control structures (if, ternary operator)
-  - Functions and parameters
-  - Arrays (associative arrays)
-  - File operations (include, read/write)
-
----
-
-## Práctica N°5: PHP (Avanzado)
-
-Advanced PHP: mail() function and session variables.
-
-### Contenido
-
-- `ejers_respuestas.txt`: Theory answers covering:
-  - mail() function for sending emails
-  - HTML email formatting
-  - Contact forms with email sending
-  - Recommend page to a friend feature
-  - Session variables for tracking user visits
-
----
-
-## Tecnologías utilizadas
-
-- HTML5 (semantic tags, audio/video, forms)
-- CSS3 (variables, flexbox, grid, animations)
-- Bootstrap 5
-- PHP (variables, arrays, functions, sessions, mail)
-
----
+MIT License - libre para uso educativo y modificación.
 
 ## Estado
 
-Repositorio en construcción: se irán agregando nuevas prácticas y mejoras durante la cursada.
+✅ **Completado** - Todas las prácticas resueltas y documentadas.
+
+¡Gracias por visitar el repositorio!
+
